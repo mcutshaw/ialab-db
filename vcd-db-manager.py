@@ -55,23 +55,23 @@ for user in users:
     href = user.attrib['href']
 
     if db.checkIalabUserExistsByID(href) == False:
+        print(name)
         db.insertIalabUser(name, href, fullName)
         ldapUsers = ldap.getUser(name)
         for ldapUser in ldapUsers:
             ldap_username = ldapUser[0]
             for email in ldapUser[1]:
+                print(email)
                 db.insertLdapUser(ldap_username, email)
     elif db.checkIalabUserExistsByID(href) == False:
         ldapUsers = ldap.getUser(name)
         for ldapUser in ldapUsers:
             ldap_username = ldapUser[0]
             for email in ldapUser[1]:
-                print(ldap_username)
                 print(email)
                 db.insertLdapUser(ldap_username, email)
             
 
     name += ":" + fullName + ':'+  href + '\n'
-    print(name)
 
 
