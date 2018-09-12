@@ -34,8 +34,6 @@ class ialab_db:
                             email VARCHAR(100),
                             FOREIGN KEY(username) REFERENCES ialab(username));''')
 
-     
-
     def close(self):
         self.conn.close()
 
@@ -68,6 +66,13 @@ class ialab_db:
     def checkIalabUserExists(self,username):
         print(username)
         count = self.executevar('SELECT COUNT(`username`) FROM `ialab` WHERE `username`=%s', (username,))
+        if(int(count[0][0])) > 0:
+            return True
+        else:
+            return False
+
+    def checkIalabUserExistsByID(self,href):
+        count = self.executevar('SELECT COUNT(`username`) FROM `ialab` WHERE `href`=%s', (href,))
         if(int(count[0][0])) > 0:
             return True
         else:
