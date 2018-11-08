@@ -1,4 +1,4 @@
-#!/usr/bin/python3.6
+#!/usr/bin/python3
 import hashlib
 import configparser
 import pymysql
@@ -56,6 +56,7 @@ class ialab_db:
         text_return = self.cur.fetchall()
         self.close()
         return text_return
+
 
     def insertLdapUser(self,username, email):
         self.executevar('INSERT INTO `ldap` VALUES(%s,%s)', (username, email))

@@ -3,15 +3,18 @@
 import sys
 import configparser
 import time
+
 from db import ialab_db
-from lxml import *
 from ldap_class import ldapConnection
+
+from lxml import *
 from pyvcloud.vcd.client import BasicLoginCredentials
 from pyvcloud.vcd.client import Client
 from pyvcloud.vcd.client import EntityType
 from pyvcloud.vcd.org import Org
 from pyvcloud.vcd.vdc import VDC
 from pyvcloud.vcd.vapp import VApp
+
 #from pyvcloud.vcd.exceptions import *
 import requests
 
