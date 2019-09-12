@@ -22,7 +22,7 @@ class ldapConnection:
             print('error in bind', self.c.result)
         self.c.start_tls()
 
-    def getFilter(self,usernames):
+    def getUsernameFilter(self,usernames):
         searchFilter = '(|'
         if type(usernames) == list:
             for username in usernames:
@@ -34,9 +34,38 @@ class ldapConnection:
             searchFilter+=')'
             return searchFilter
 
-    def getUser(self, username):
-        searchFilter = self.getFilter(username)
+    def getEmailFilter(self,emails):
+        searchFilter = '(|'
+        if type(emails) == list:
+            for email in emails:
+                searchFilter+='(proxyAddresses=*' + email + '*)'
+            searchFilter+=')'
+            return searchFilter
+        elif type(emails) == str:
+            searchFilter+='(proxyAddresses=*' + emails + '*)'
+            searchFilter+=')'
+            return searchFilter
+
+    def getUserByUsername(self, username):
+        searchFilter = self.getUsernameFilter(username)
         users = []
+        for item in self.filterList:
+            self.c.search(item,searchFilter,attributes=['cn', 'proxyAddresses', 'sAMAccountName'])
+            for entry in self.c.entries:
+                accountUsername = entry['sAMAccountName']
+                proxyAddresses = entry['proxyAddresses']
+                accountUsername = str(accountUsername).replace('sAMAccountName: ','')
+                emails = []
+                for email in proxyAddresses:
+                    if 'smtp' in email.lower():
+                        emails.append(email.lower().replace('smtp:',''))
+                users.append((accountUsername, emails))
+        return users
+
+    def getUserByUsernameByEmail(self, email):
+        searchFilter = self.getEmailFilter(email)
+        users = []
+
         for item in self.filterList:
             self.c.search(item,searchFilter,attributes=['cn', 'proxyAddresses', 'sAMAccountName'])
             for entry in self.c.entries:

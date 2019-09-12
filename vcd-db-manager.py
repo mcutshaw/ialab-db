@@ -60,14 +60,14 @@ for user in users:
     if db.checkIalabUserExistsByID(href) == False:
         print(name)
         db.insertIalabUser(name, href, fullName)
-        ldapUsers = ldap.getUser(name)
+        ldapUsers = ldap.getUserByUsername(name)
         for ldapUser in ldapUsers:
             ldap_username = ldapUser[0]
             for email in ldapUser[1]:
                 print(email)
                 db.insertLdapUser(ldap_username, email)
     elif db.checkIalabUserExistsByID(href) == False:
-        ldapUsers = ldap.getUser(name)
+        ldapUsers = ldap.getUserByUsername(name)
         for ldapUser in ldapUsers:
             ldap_username = ldapUser[0]
             for email in ldapUser[1]:
